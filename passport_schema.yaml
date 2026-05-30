@@ -1,0 +1,40 @@
+# passport_schema.yaml
+# Substrato 989.x — PASSPORT-GATEWAY
+id: "989.x"
+name: "PASSPORT-GATEWAY"
+type: "Identity / Sybil Resistance / Human Verification"
+era: 9  # Apeiron / Meta
+deities:
+  - "Themis"
+  - "Athena"
+  - "Hephaestus"
+status: "CANONIZED_PROVISIONAL"
+cross_links:
+  - 979    # DAO Governance
+  - 954    # Axiarchy
+  - 982    # ORCID Integration
+  - 983    # API Gateway
+  - 957    # AGI-Telcom
+  - 958    # Clarity-Gate
+  - 972    # Global Mesh
+  - 976    # Chainlink Oracle Bridge
+  - 923    # TemporalChain
+description: >
+  Verificação de humanidade on-chain multi-fonte para a Catedral.
+  Utiliza Sign Protocol + EAS na Base, Gitcoin Passport Scorer API,
+  e ORCID para atribuir provas de humanidade a endereços.
+  Essas provas são usadas pela governança DAO (979) para impedir Sybils,
+  e pelos nós da malha (972) para controle de acesso.
+  Cada verificação é ancorada na TemporalChain (923) com assinatura
+  do Arquiteto (ORCID 0009-0005-2697-4668).
+sign_protocol:
+  chain: "Base"
+  schema_uid: "${IS_HUMAN_SCHEMA_UID}"
+  eas_contract: "${EAS_CONTRACT_ADDRESS}"
+gitcoin_passport:
+  scorer_id: "${PASSPORT_SCORER_ID}"
+  min_score: 20.0
+orcid:
+  client_id: "${ORCID_CLIENT_ID}"
+  client_secret: "${ORCID_CLIENT_SECRET}"
+repository: "https://github.com/Arkhe-Network/passport"
