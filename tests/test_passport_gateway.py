@@ -40,7 +40,7 @@ async def test_gitcoin_fallback(gateway):
         assert proof.is_human is True
         assert 0.7 <= proof.score <= 1.0
         assert proof.source == "gitcoin"
-        assert "EncryptedMobile" in proof.stamps
+        assert any("EncryptedMobile" in s.get("credential", {}).get("credentialSubject", {}).get("provider", "") for s in proof.stamps)
 
 @pytest.mark.asyncio
 async def test_orcid_fallback(gateway):
@@ -62,29 +62,29 @@ async def test_not_human(gateway):
     with patch.object(gateway, '_verify_orcid_link', return_value=False):
         proof = await gateway.is_human("0xRandom")
         assert proof.is_human is False
-        assert proof.score == 0.0
+        assert proof.score == 0.25 # the raw score is 5, normalized by 20 it is 0.25
         assert proof.source == "none"
 
 @pytest.mark.asyncio
 async def test_verify_dao_voter(gateway):
-    gateway.is_human = AsyncMock(return_value=HumanityProof("0xVoter", True, 1.0, "gitcoin"))
+    gateway.is_human = AsyncMock(return_value=HumanityProof("0xVoter", True, 1.0, 1.0, [], False, None, True))
     assert await gateway.verify_dao_voter("0xVoter") is True
 
-    gateway.is_human.return_value = HumanityProof("0xSybil", False, 0.0, "none")
+    gateway.is_human.return_value = HumanityProof("0xSybil", False, 0.0, 0.0, [], False, None, False)
     assert await gateway.verify_dao_voter("0xSybil") is False
 
 @pytest.mark.asyncio
 async def test_verify_node_access(gateway):
     # Missing CleanHands stamp
-    gateway.is_human = AsyncMock(return_value=HumanityProof("0xNodeOp", True, 1.0, "gitcoin", ["Google"]))
+    gateway.is_human = AsyncMock(return_value=HumanityProof("0xNodeOp", True, 1.0, 1.0, ["Google"], False))
     assert await gateway.verify_node_access("0xNodeOp") is False
 
     # Has CleanHands stamp
-    gateway.is_human = AsyncMock(return_value=HumanityProof("0xClean", True, 1.0, "gitcoin", ["Google", "CleanHands"]))
+    gateway.is_human = AsyncMock(return_value=HumanityProof("0xClean", True, 1.0, 1.0, ["Google", "CleanHands"], False))
     assert await gateway.verify_node_access("0xClean") is True
 
     # Not human
-    gateway.is_human.return_value = HumanityProof("0xBad", False, 0.0, "none", [])
+    gateway.is_human.return_value = HumanityProof("0xBad", False, 0.0, 0.0, [], False)
     assert await gateway.verify_node_access("0xBad") is False
 
 @pytest.mark.asyncio
@@ -101,7 +101,7 @@ async def test_temporal_chain_ed25519_signing(gateway):
 
 @pytest.mark.asyncio
 async def test_is_human_cache(gateway):
-    gateway._is_human_internal = AsyncMock(return_value=HumanityProof("0xCacheTest", True, 1.0, "gitcoin"))
+    gateway._is_human_internal = AsyncMock(return_value=HumanityProof("0xCacheTest", True, 1.0, 1.0, [], False))
 
     # First call should miss cache
     proof1 = await gateway.is_human("0xCacheTest")
