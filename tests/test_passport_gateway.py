@@ -75,7 +75,39 @@ async def test_verify_dao_voter(gateway):
 
 @pytest.mark.asyncio
 async def test_verify_node_access(gateway):
-    gateway.verify_dao_voter = AsyncMock(return_value=True)
-    assert await gateway.verify_node_access("0xNodeOp") is True
-    gateway.verify_dao_voter.return_value = False
+    # Missing CleanHands stamp
+    gateway.is_human = AsyncMock(return_value=HumanityProof("0xNodeOp", True, 1.0, "gitcoin", ["Google"]))
+    assert await gateway.verify_node_access("0xNodeOp") is False
+
+    # Has CleanHands stamp
+    gateway.is_human = AsyncMock(return_value=HumanityProof("0xClean", True, 1.0, "gitcoin", ["Google", "CleanHands"]))
+    assert await gateway.verify_node_access("0xClean") is True
+
+    # Not human
+    gateway.is_human.return_value = HumanityProof("0xBad", False, 0.0, "none", [])
     assert await gateway.verify_node_access("0xBad") is False
+
+@pytest.mark.asyncio
+async def test_temporal_chain_ed25519_signing(gateway):
+    gateway.check_sign_protocol_attestation = AsyncMock(return_value=SAMPLE_SIGN_ATTEST)
+    proof = await gateway.is_human("0xTestSign")
+    assert proof.seal is not None
+    assert proof.seal.startswith("923-")
+    parts = proof.seal.split("-")
+    assert len(parts) == 3
+    assert len(parts[1]) == 32 # sha3_256 hash first 32 chars
+    assert len(parts[2]) == 16 # signature truncated to 16 chars
+
+
+@pytest.mark.asyncio
+async def test_is_human_cache(gateway):
+    gateway._is_human_internal = AsyncMock(return_value=HumanityProof("0xCacheTest", True, 1.0, "gitcoin"))
+
+    # First call should miss cache
+    proof1 = await gateway.is_human("0xCacheTest")
+    assert gateway._is_human_internal.call_count == 1
+
+    # Second call should hit cache
+    proof2 = await gateway.is_human("0xCacheTest")
+    assert gateway._is_human_internal.call_count == 1
+    assert proof1 is proof2
