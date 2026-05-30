@@ -17,9 +17,12 @@ import hashlib
 import json
 import os
 import logging
+import nacl.signing
+import nacl.encoding
 from typing import Dict, Optional, List, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+import time
 
 import aiohttp
 
@@ -68,6 +71,9 @@ class PassportGateway:
         self.temporalchain_endpoint = os.environ.get(
             "TEMPORALCHAIN_ENDPOINT", "https://api.arkhe-catedral.org/v1/anchor"
         )
+        # Cache distribuído simulado (TTL 300s)
+        self.cache = {}
+        self.cache_ttl = 300
 
     # -----------------------------------------------------------------
     # Ciclo de vida
@@ -169,6 +175,18 @@ class PassportGateway:
     # -----------------------------------------------------------------
     async def is_human(self, address: str) -> HumanityProof:
         """Determina se um endereço é humano com base nas fontes configuradas."""
+        # Check cache
+        cached = self.cache.get(address)
+        if cached:
+            proof, timestamp = cached
+            if time.time() - timestamp < self.cache_ttl:
+                return proof
+
+        proof = await self._is_human_internal(address)
+        self.cache[address] = (proof, time.time())
+        return proof
+
+    async def _is_human_internal(self, address: str) -> HumanityProof:
         # 1. Sign Protocol
         sign_att = await self.check_sign_protocol_attestation(address)
         if sign_att and sign_att.get("is_human"):
@@ -243,8 +261,15 @@ class PassportGateway:
             "timestamp": proof.timestamp,
         }
         json_str = json.dumps(data, sort_keys=True)
-        proof.seal = f"923-{hashlib.sha3_256(json_str.encode()).hexdigest()[:32]}"
-        logger.debug(f"Proof ancorada: {proof.seal}")
+
+        # Ed25519 Signing
+        seed = os.environ.get("ARCHITECT_ED25519_SEED", "0" * 32).encode("utf-8")[:32].ljust(32, b'0')
+        signing_key = nacl.signing.SigningKey(seed)
+        signed = signing_key.sign(json_str.encode("utf-8"))
+        signature_hex = signed.signature.hex()
+
+        proof.seal = f"923-{hashlib.sha3_256(json_str.encode()).hexdigest()[:32]}-{signature_hex[:16]}"
+        logger.debug(f"Proof ancorada e assinada com Ed25519: {proof.seal}")
 
     # -----------------------------------------------------------------
     # 6. Integrações com DAO e Malha
@@ -255,5 +280,10 @@ class PassportGateway:
         return proof.is_human
 
     async def verify_node_access(self, address: str) -> bool:
-        """Um endereço pode operar um nó se for humano."""
-        return await self.verify_dao_voter(address)
+        """Um endereço pode operar um nó se for humano e possuir Proof of Clean Hands (957)."""
+        proof = await self.is_human(address)
+        if not proof.is_human:
+            return False
+
+        # Proof of Clean Hands (sanctions/PEP) for AGI-Telcom
+        return "CleanHands" in proof.stamps
