@@ -1,0 +1,113 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/app/kleros_integration/contracts/CathedralKlerosBridge.sol": {
+      "lastModificationDate": 1780688398320,
+      "contentHash": "8bf77b3afa15e03106e515ba7939a284",
+      "sourceName": "contracts/CathedralKlerosBridge.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "CathedralKlerosBridge"
+      ]
+    },
+    "/app/kleros_integration/contracts/CathedralKlerosBridgeWithVoting.sol": {
+      "lastModificationDate": 1780688417684,
+      "contentHash": "05fb22b38743b308f2c18123d6327177",
+      "sourceName": "contracts/CathedralKlerosBridgeWithVoting.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./CathedralKlerosBridge.sol",
+        "./PNKTheosisOracle.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "CathedralKlerosBridgeWithVoting"
+      ]
+    },
+    "/app/kleros_integration/contracts/PNKTheosisOracle.sol": {
+      "lastModificationDate": 1780688302960,
+      "contentHash": "46d5dae5f4e753030b6228fc00e48751",
+      "sourceName": "contracts/PNKTheosisOracle.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "PNKTheosisOracle"
+      ]
+    }
+  }
+}
