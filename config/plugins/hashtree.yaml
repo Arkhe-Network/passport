@@ -1,0 +1,20 @@
+# config/plugins/hashtree.yaml — Substrato 1101
+substrates:
+  hashtree:
+    visibility: "link_visible"  # public | link_visible | private
+    nostr:
+      private_key: "${NOSTR_PRIVATE_KEY}"
+      relays:
+        - "wss://relay.damus.io"
+        - "wss://relay.nostr.bg"
+        - "wss://nos.lol"
+        - "wss://nostr.wine"
+    blossom:
+      servers:
+        - "https://blossom.nostr.com"
+        - "https://cdn.nostr.build"
+    p2p:
+      max_hops: 18
+      bootstrap_peers: []
+    persist_interval: 500
+    encrypt_lake: true

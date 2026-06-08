@@ -1,0 +1,19 @@
+# config/plugins/onchain.yaml — Substrato 1100
+substrates:
+  onchain:
+    chain_id: "1"
+    rpc_url: "${ETHERSCAN_RPC_URL}"
+    api_key: "${ETHERSCAN_API_KEY}"
+    private_key: "${CANONIZER_PRIVATE_KEY}"
+    target_addresses:
+      - "0xbF7Da1f568684889A69A5BED9F1311F703985590"
+      - "0x716aD3C33A9B9a0A18967357969b94EE7d2ABC10"
+    sync_interval: 300
+    governance_deadline: 604800
+    merkle_anchor_interval: 100
+    auto_canonize_kleros: true
+    auto_canonize_garak: true
+    domain:
+      name: "CathedralArkhe"
+      version: "6.0.0"
+      verifyingContract: "0xbF7Da1f568684889A69A5BED9F1311F703985590"
