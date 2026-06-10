@@ -1,0 +1,23 @@
+name: Formal Verification Superego
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  verify_proofs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Enforce Lean 4 Proof Requirement
+        run: |
+          python cathedral-agi-omega/INFRASTRUCTURE/ci_cd/reject_unproven.py
