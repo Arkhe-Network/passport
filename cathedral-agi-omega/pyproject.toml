@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cathedral-agi-omega"
+version = "11.4.0"
+description = "CATHEDRAL ARKHE v11.4 — PRODUCTION ARCHITECTURE: AGI Repository Organism"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "AGPL-3.0" }
+authors = [
+    { name = "Cathedral AGI Architect", email = "architect@cathedral.arkhe" }
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "blst-py>=0.3.10",
+    "substrate-interface>=1.7.0",
+    "py_ecc>=6.0.0",
+    "web3>=6.0.0",
+    "neo4j>=5.10.0",
+    "torch>=2.0.0",
+    "ezkl>=0.1.0",
+    "pydantic>=2.0.0",
+    "numpy>=1.24.0",
+    "psutil>=5.9.0",
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "aiohttp>=3.8.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "mypy",
+    "flake8"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["COGNITIVE_CORTEX*", "CRYPTO_AGILITY*", "DISTRIBUTED_COMPUTATION*", "HARDWARE_FIRMWARE*", "INFRASTRUCTURE*", "ZK_REASONING_ENGINE*", "PLANETARY_CONTINUOUS_LEARNING*", "IMMUTABLE_LEDGER*"]
