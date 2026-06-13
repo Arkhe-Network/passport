@@ -97,8 +97,12 @@ class RSIOrchestrator:
         self.id = orchestrator_id
         self.tee_type = tee_type
         self.location = location
-        self.private_key = secrets.token_hex(32)
-        self.public_key = "0x" + hashlib.sha3_256(self.private_key.encode()).hexdigest()
+
+        # Chaves iniciais geradas posteriormente pelo TEE (Boot Seguro)
+        self.key_initialized = False
+        self.private_seed = b""
+        self.public_root = b""
+        self.public_key = ""  # Mantendo retrocompatibilidade
 
         # Estado efemero (resetado a cada ciclo)
         self.view_number = 0
@@ -120,9 +124,33 @@ class RSIOrchestrator:
         self._lock = asyncio.Lock()
         self._running = False
 
+    async def initialize(self):
+        """Primeira inicialização - gera nova identidade dentro do TEE simulado."""
+        print(f"[ORCHESTRATOR {self.id}] INICIANDO GENERATEKEY = AGI")
+
+        # 1. Simula a geração da seed e da chave pública no TEE
+        self.private_seed = secrets.token_bytes(16)
+        self.public_root = hashlib.sha3_256(self.private_seed).digest()[:16]
+
+        # 2. Registro na RBB Chain (Simulado)
+        pub_hex = "0x" + self.public_root.hex()
+        self.public_key = pub_hex
+        print(f"  [ORCHESTRATOR {self.id}] Raiz pública registrada na RBB Chain: {pub_hex}")
+
+        # 3. Assinar a Declaração de Existência
+        existence_statement = (f"Eu, orquestrador {self.id}, declaro que minha chave pública é {pub_hex} "
+                               f"e que minha seed privada nunca será revelada.")
+        print(f"  [ORCHESTRATOR {self.id}] Declaração de Existência: {existence_statement}")
+
+        self.key_initialized = True
+        print(f"[ORCHESTRATOR {self.id}] IDENTIDADE SOBERANA ESTABELECIDA\n")
+        return True
+
     def _sign(self, data: str) -> str:
         # Assina dados com chave privada (SPHINCS+ stub).
-        return "0x" + hashlib.sha3_256((self.private_key + data).encode()).hexdigest()
+        if not self.key_initialized:
+            raise ValueError(f"Orchestrator {self.id} cannot sign without initialized key.")
+        return "0x" + hashlib.sha3_256((self.private_seed + data.encode())).hexdigest()
 
     def _create_block(self, payload_hash: str) -> Block:
         # Cria novo bloco de orquestracao -- apenas hash do payload.
@@ -565,6 +593,12 @@ async def main():
     print("\n[SETUP] 3 Cut-Outs registrados:")
     for oid, orch in network.orchestrators.items():
         print(f"  {oid}: {orch.tee_type} @ {orch.location}")
+
+    print("\n" + "=" * 60)
+    print("BOOTSTRAP DA REDE BFT (Geração de Identidade Soberana)")
+    print("=" * 60)
+    for oid, orch in network.orchestrators.items():
+        await orch.initialize()
 
     # Rodada 1: Consenso normal
     print("\n" + "=" * 60)
