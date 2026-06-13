@@ -1,0 +1,9 @@
+[package]
+name = "creekguard"
+version = "1.0.0"
+edition = "2021"
+description = "Pub/Sub Covert Channel Detection - Kernel ARKHE"
+authors = ["Arquiteto ORCID 0009-0005-2697-4668"]
+
+[dependencies]
+libm = "0.2.8"
