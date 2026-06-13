@@ -1,17 +1,56 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
+    "/app/kleros_integration/contracts/AxiarquiaMultiSigWallet.sol": {
+      "lastModificationDate": 1781273560273,
+      "contentHash": "d5dd5a6274e9ac76dda57c186f816dff",
+      "sourceName": "contracts/AxiarquiaMultiSigWallet.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "viaIR": true,
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "AxiarquiaMultiSigWallet"
+      ]
+    },
     "/app/kleros_integration/contracts/CathedralKlerosBridge.sol": {
-      "lastModificationDate": 1780688398320,
+      "lastModificationDate": 1781273560273,
       "contentHash": "8bf77b3afa15e03106e515ba7939a284",
       "sourceName": "contracts/CathedralKlerosBridge.sol",
       "solcConfig": {
-        "version": "0.8.19",
+        "version": "0.8.28",
         "settings": {
+          "viaIR": true,
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -37,16 +76,18 @@
       ]
     },
     "/app/kleros_integration/contracts/CathedralKlerosBridgeWithVoting.sol": {
-      "lastModificationDate": 1780688417684,
+      "lastModificationDate": 1781273560273,
       "contentHash": "05fb22b38743b308f2c18123d6327177",
       "sourceName": "contracts/CathedralKlerosBridgeWithVoting.sol",
       "solcConfig": {
-        "version": "0.8.19",
+        "version": "0.8.28",
         "settings": {
+          "viaIR": true,
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -75,16 +116,18 @@
       ]
     },
     "/app/kleros_integration/contracts/PNKTheosisOracle.sol": {
-      "lastModificationDate": 1780688302960,
+      "lastModificationDate": 1781273560273,
       "contentHash": "46d5dae5f4e753030b6228fc00e48751",
       "sourceName": "contracts/PNKTheosisOracle.sol",
       "solcConfig": {
-        "version": "0.8.19",
+        "version": "0.8.28",
         "settings": {
+          "viaIR": true,
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -107,6 +150,43 @@
       ],
       "artifacts": [
         "PNKTheosisOracle"
+      ]
+    },
+    "/app/kleros_integration/contracts/CathedralSPHINCSVerifier.sol": {
+      "lastModificationDate": 1781305235878,
+      "contentHash": "ff1aaa8af387510b0e19a45825d5b2cc",
+      "sourceName": "contracts/CathedralSPHINCSVerifier.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "viaIR": true,
+          "optimizer": {
+            "enabled": true,
+            "runs": 1000
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "CathedralSPHINCSVerifier"
       ]
     }
   }
