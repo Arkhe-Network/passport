@@ -39,3 +39,4 @@ schemas/.env.yarn
 .claude/knowledge/mim.log
 __pycache__/
 *.pyc
+target/
