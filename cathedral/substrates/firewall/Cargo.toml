@@ -1,0 +1,9 @@
+[package]
+name = "substrato_2140_7_firewall"
+version = "1.0.0"
+edition = "2021"
+authors = ["Arquiteto ORCID 0009-0005-2697-4668"]
+description = "Firewall Semântico Temporal — Kernel ARKHE"
+
+[lib]
+path = "lib.rs"
